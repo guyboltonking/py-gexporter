@@ -8,6 +8,8 @@ _BOOKMARKS_FILE = os.path.expanduser('~/Bookmarks.plist')
 
 @system.iOS('11.0')
 def get_bookmark_paths():
+    """Return the paths at which external folders are mapped into Pythonista"""
+
     if not os.path.isfile(_BOOKMARKS_FILE):
         return None
 
@@ -26,5 +28,4 @@ def get_bookmark_paths():
                 paths.append(str(url.path()))
 
         return paths
-        
-print(get_bookmark_paths())
+
