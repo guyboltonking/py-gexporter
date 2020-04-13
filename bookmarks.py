@@ -3,12 +3,11 @@ import os
 from pathlib import Path
 
 from objc_util import ns, NSURL
-import blackmamba.system as system
+
 
 _BOOKMARKS_FILE = os.path.expanduser('~/Bookmarks.plist')
 
 
-@system.iOS('11.0')
 def get_bookmark_paths() -> Path:
     """Return the paths at which external folders are mapped into Pythonista"""
 
@@ -35,6 +34,8 @@ def get_bookmark_path_for(external_folder):
     """Get the bookmark path for the named external_folder (which is the
     basename of the folder)"""
     
-    return [path for path in get_bookmark_paths()
-        if path.name == external_folder]
+    for path in get_bookmark_paths():
+        if path.name == external_folder:
+        	return path
+    return None
 

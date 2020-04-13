@@ -2,16 +2,12 @@ from flask import Flask, jsonify, send_from_directory, request
 from werkzeug.exceptions import BadRequest, HTTPException
 from pathlib import Path
 from urllib.parse import quote
+from bookmarks import get_bookmark_path_for
 
-
-ROUTE_DIR = "."
+ROUTE_DIR = get_bookmark_path_for("Routes")
 
 app = Flask("py-gexporter", static_folder=None)
 app.config.from_object(__name__)
-
-
-def create_json_index(root: Path):
-    pass
 
 
 @app.errorhandler(HTTPException)
@@ -49,7 +45,7 @@ def dir_json():
         for file in files
     ]
 
-    return jsonify(results)
+    return jsonify({"tracks": results})
 
 
 @app.route("/<path:filename>")
@@ -67,4 +63,4 @@ def route_file(filename):
 
 
 if __name__ == "__main__":
-    app.run(port=22222)
+    app.run(port=22222, debug=True, use_reloader=False)
