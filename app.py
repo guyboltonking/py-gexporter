@@ -1,10 +1,17 @@
+import os
+
 from flask import Flask, jsonify, send_from_directory, request
 from werkzeug.exceptions import BadRequest, HTTPException
 from pathlib import Path
 from urllib.parse import quote
-from bookmarks import get_bookmark_path_for
 
-ROUTE_DIR = get_bookmark_path_for("Routes")
+try:
+    from bookmarks import get_bookmark_path_for
+
+    ROUTE_DIR = get_bookmark_path_for("Routes")
+
+except ImportError:
+    ROUTE_DIR = Path(os.environ.get("ROUTE_DIR", "."))
 
 app = Flask("py-gexporter", static_folder=None)
 app.config.from_object(__name__)
@@ -41,7 +48,7 @@ def dir_json():
         raise BadRequest("Bad type {}".format(type))
 
     results = [
-        {"url": quote(file.name, encoding="utf-8"), "track": file.name}
+        {"url": quote(file.name, encoding="utf-8"), "title": file.name}
         for file in files
     ]
 
